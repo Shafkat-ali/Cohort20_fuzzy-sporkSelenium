@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,13 +15,14 @@ import java.time.Duration;
 public class alertBoxTestinTask {
 
 
-
   WebDriver driver;
   WebDriverWait wait;
+  JavascriptExecutor js;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     driver = new ChromeDriver();
+    js = (JavascriptExecutor) driver;
     driver.get("https://demoqa.com/alerts");
     driver.manage().window().maximize();
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -31,6 +33,8 @@ public class alertBoxTestinTask {
   @Test
   public void validateJavascriptAlertBoxes() throws InterruptedException {
 
+
+    js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("alertButton")));
     //first alert box
     driver.findElement(By.id("alertButton")).click();
     wait.until(ExpectedConditions.alertIsPresent());
@@ -38,9 +42,8 @@ public class alertBoxTestinTask {
     Assert.assertEquals("You clicked a button", alertBox1Text);
     driver.switchTo().alert().accept();
 
-
-
-//second alertbox
+    js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("timerAlertButton")));
+    //second alertbox
     driver.findElement(By.id("timerAlertButton")).click();
       ///explicitly wait for the alert to be present.. it says 5 seconds
     wait.until(ExpectedConditions.alertIsPresent());
@@ -50,7 +53,8 @@ public class alertBoxTestinTask {
     driver.switchTo().alert().accept();
 
 
-   //third alertbox
+    js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("confirmButton")));
+    //third alertbox
     driver.findElement(By.id("confirmButton")).click();
     wait.until(ExpectedConditions.alertIsPresent());
     String alertBox3Text = driver.switchTo().alert().getText();
@@ -61,9 +65,10 @@ public class alertBoxTestinTask {
     Assert.assertEquals(expectedAlertConfirmation, actualAlertConfirmation);
 
 
-
+    js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("promtButton")));
     //four alertbox
     driver.findElement(By.id("promtButton")).click();
+//    js.executeScript("arguments[0].click();", element);
     wait.until(ExpectedConditions.alertIsPresent());
     driver.switchTo().alert().sendKeys("TechCircle");
     driver.switchTo().alert().accept();
